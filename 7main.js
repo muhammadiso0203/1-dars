@@ -1,15 +1,10 @@
 function bahoTahlili(baholar) {
-    let summa = 0;
-    let last = baholar[0];
-    let low = baholar[0];
+    const darajalar = { A: 0, B: 0, C: 0, D: 0, F: 0 };
 
-    let darajalar = { A: 0, B: 0, C: 0, D: 0, F: 0 };
-
-    for (let baho of baholar) {
-        summa += baho;
-
-        if (baho > last) last = baho;
-        if (baho < low) low = baho;
+    const { summa, max, min } = baholar.reduce((acc, baho) => {
+        acc.summa += baho;
+        acc.max = Math.max(acc.max, baho);
+        acc.min = Math.min(acc.min, baho);
 
         if (baho >= 90 && baho <= 100) darajalar.A++;
         else if (baho >= 80) darajalar.B++;
@@ -17,14 +12,16 @@ function bahoTahlili(baholar) {
         else if (baho >= 60) darajalar.D++;
         else if (baho >= 0) darajalar.F++;
         else console.log("Xato");
-    }
 
-    let sum = summa / baholar.length;
+        return acc;
+    }, { summa: 0, max: baholar[0], min: baholar[0] });
+
+    const o‘rtacha = (summa / baholar.length).toFixed(2);
 
     return {
-        "O'rtacha baho": sum.toFixed(2),
-        "Eng yuqori baho": last,
-        "Eng past baho": low,
+        "O'rtacha baho": o‘rtacha,
+        "Eng yuqori baho": max,
+        "Eng past baho": min,
         "A daraja": darajalar.A,
         "B daraja": darajalar.B,
         "C daraja": darajalar.C,
@@ -32,5 +29,3 @@ function bahoTahlili(baholar) {
         "F daraja": darajalar.F
     };
 }
-
-console.log(bahoTahlili([85, 92, 78, 63, 55, 100, 87, 45, 70, 88]));
